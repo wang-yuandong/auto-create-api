@@ -1,0 +1,9 @@
+export const <%= apiName %> = (params) =>
+    requestByFetch({
+        url: `<%= url %>`,
+        method: '<%= method %>',
+        data: params,
+        requestBodyType: '<%= requestBodyType %>',
+        responseBodyType: '<%= responseBodyType %>',
+        needToken: <%= needToken %>,
+    })
