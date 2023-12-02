@@ -28,17 +28,17 @@ const createApiNameAndUrl = (key) => {
         }
         handleStr = handleStr.replace(/[-_]+([a-z])/g, (_, match) => match.toUpperCase());
         return handleStr
-    })
+    });
     const urlArr = arr.map((item) => {
         return item.replace(/\{(\w+)\}/, '${params.$1}');
     })
     return {
-        apiName: nameArr.join(''),
+        apiName: nameArr.join('') + 'Api',
         url: urlArr.join('/')
     }
 }
 const obj = {}
-Object.entries(paths).forEach(([key, value]) => {
+Object.entries(apiPaths).forEach(([key, value]) => {
     const subPathArr = key.split('/');
     const optionsArr = value.split('|');
     const {apiName, url} = createApiNameAndUrl(key);
