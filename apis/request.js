@@ -29,7 +29,7 @@ const defaultParam = {
     responseBodyType: 'JSON',
     needToken: true,
 }
-export const requestByFetch = async (param) => {
+export const request = async (param) => {
     const paramAfterAssign = {...defaultParam, ...param}
     const headers = Object.assign(
         {},

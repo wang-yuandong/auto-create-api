@@ -28,4 +28,5 @@ export const apiPaths = {
     '/user/subuser/list/{id}/{name}': 'GET|String|JSON|1',
     '/service-user/user/getUserInfo': 'GET|String|JSON|1',
     '/service-sso/sso/login': 'GET|String|JSON|1',
+    '/service-list/sso/login': 'GET|',
 }
