@@ -1,12 +1,17 @@
 # 根据给定模版自动生成api文件
 
 ## 文件说明
-- apis
-  - create.js 主要执行文件
-  - paths.config.js 接口路径配置文件
-  - template.ejs 模版文件--生成js
-  - template.ts.ejs 模版文件--生成ts
-  - request.js 封装的接口请求方法 `export const request = ...`
+
+```
+project
+├── apis // 存放接口文件
+│   ├── create.js // 接口创建文件
+│   ├── paths.config.js // 接口路径配置文件
+│   ├── request.js // 封装的接口请求方法
+│   ├── template.ejs // 模版文件--生成js
+│   └── template.ts.ejs // 模版文件--生成ts
+└── package.json
+```
 
 ## paths.config.js格式
 ```javascript
