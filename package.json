@@ -3,8 +3,7 @@
   "version": "0.1.1",
   "description": "根据配置文件及模板自动生成api",
   "type": "module",
-  "scripts": {
-  },
+  "scripts": {},
   "keywords": [
     "auto",
     "api"
