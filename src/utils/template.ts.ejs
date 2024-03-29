@@ -1,0 +1,9 @@
+export const <%= apiName %> = (params:any) =>
+  request({
+    url: `<%= url %>`,
+    method: '<%= method %>',
+    data: params,
+    requestType: '<%= requestType %>',
+    responseType: '<%= responseType %>',
+    isAuth: <%= isAuth %>,
+  })

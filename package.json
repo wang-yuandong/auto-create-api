@@ -1,17 +1,31 @@
 {
-  "name": "auto-generate-api-file",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "auto-generate-api",
+  "version": "0.1.0",
+  "description": "根据配置文件及模板自动生成api",
   "type": "module",
   "scripts": {
-    "createApi": "node apis/create.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "auto",
+    "api"
+  ],
+  "author": "wangyuandong",
+  "license": "MIT",
   "dependencies": {
+    "chokidar": "^3.6.0",
     "ejs": "^3.1.9"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wang-yuandong/auto-generate-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wang-yuandong/auto-generate-api/issues"
+  },
+  "homepage": "https://github.com/wang-yuandong/auto-generate-api#readme",
+  "exports": {
+    "./rollup": {
+      "import": "./src/rollup.js"
+    }
   }
 }
