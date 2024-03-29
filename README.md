@@ -2,14 +2,6 @@
 
 ## 文件说明
 
-```
-project
-├── apis // 存放接口文件
-│   ├── paths.json // 接口路径配置文件
-│   ├── request.js // 封装的接口请求方法
-└── package.json
-```
-
 ```javascript
 
 // 'url': requestMethod|paramType|responseType|isAuth:[0|1]
@@ -26,8 +18,29 @@ project
  *   ...
  */
 ```
-### e.g.
+## use case
+### before create
 
+```
+src
+├── apis // 存放接口文件
+│   ├── paths.json // 接口路径配置文件
+│   ├── request.js // 封装的接口请求方法 默认与paths.json同级目录，文件名为request，暂不支持修改
+...
+```
+### after create
+```
+src
+├── apis // 存放接口文件
+│   ├── user // 根据url第一段路径生成
+│       └── subuser.api.js // 根据url第二段路径命名
+│   ├── profile 
+│       └── detail.api.js
+│   ├── paths.json // 接口路径配置文件
+│   ├── request.js // 封装的接口请求方法 默认与paths.json同级目录，文件名为request，暂不支持修改
+...
+```
+### paths.json
 ```json
 {
   "/profile/password/reset/confirm/edit": "GET|String|JSON|0",
@@ -41,6 +54,27 @@ project
   "/service-list/sso/login": "GET|String|JSON|1"
 }
 ```
+### options
+```javascript
+{
+    folderPath: 'apis', // 生成的文件父级目录 default value is 'apis'
+    pathsFileName: 'paths.json', // 接口路径配置文件名称 default value is 'paths.json'
+    ts: false // 是否生成ts文件 default value is false
+}
+```
+### rollup or vite
+```javascript
+import autoCreateApi from 'auto-create-api/rollup'
 
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [
+    // ...
+    autoCreateApi(), 
+    // ...
+  ],
+})
+
+```
 
 
