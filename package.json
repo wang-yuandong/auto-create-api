@@ -1,6 +1,6 @@
 {
   "name": "auto-create-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "根据配置文件及模板自动生成api",
   "type": "module",
   "scripts": {},
