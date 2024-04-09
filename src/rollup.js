@@ -6,7 +6,8 @@ export default (options = {}) => {
   const defaultOptions = {
     folderPath: 'apis',
     pathsFileName: 'paths.json',
-    ts: false
+    ts: false,
+    log: false
   }
   const mergedOptions = { ...defaultOptions, ...options }
   const configFilePath = path.join(process.cwd(), 'src', mergedOptions.folderPath, mergedOptions.pathsFileName)
@@ -30,7 +31,5 @@ export default (options = {}) => {
       // 清理资源，在插件卸载时关闭文件监听器
       return () => watcher.close()
     }
-
   }
 }
-

@@ -26,5 +26,8 @@
     "./rollup": {
       "import": "./src/rollup.js"
     }
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
   }
 }
