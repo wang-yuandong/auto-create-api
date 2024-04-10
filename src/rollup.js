@@ -1,5 +1,5 @@
 import chokidar from 'chokidar'
-import { createFile } from './utils/create.js'
+import { create } from './utils/create.js'
 import path from 'path'
 
 export default (options = {}) => {
@@ -25,7 +25,7 @@ export default (options = {}) => {
       // 监听文件变化事件
       watcher.on('change', (filePath) => {
         // console.log(`----------------------------------File ${filePath} has been changed, triggering rebuild...`)
-        createFile({ ...mergedOptions, configFilePath })
+        create({ ...mergedOptions, configFilePath })
       })
 
       // 清理资源，在插件卸载时关闭文件监听器
