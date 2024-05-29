@@ -1,8 +1,7 @@
 {
   "name": "auto-create-api",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "根据配置文件及模板自动生成api",
-  "type": "module",
   "scripts": {},
   "keywords": [
     "auto",
@@ -24,7 +23,7 @@
   "homepage": "https://github.com/wang-yuandong/auto-create-api#readme",
   "exports": {
     "./rollup": {
-      "import": "./src/rollup.js"
+      "import": "./src/rollup.mjs"
     }
   },
   "devDependencies": {
