@@ -1,12 +1,15 @@
 {
   "name": "auto-create-api",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "根据配置文件及模板自动生成api",
   "scripts": {},
   "keywords": [
     "auto",
     "api"
   ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "author": "wangyuandong",
   "license": "MIT",
   "dependencies": {
