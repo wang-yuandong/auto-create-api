@@ -7,7 +7,7 @@ esbuild
     format: 'cjs',
     platform: 'node',
     outdir: 'dist',
-    external: ['./node_modules/*'],
+    external: ['ejs','chokidar'],
     outExtension: { '.js': '.cjs' }
   })
   .catch(() => process.exit(1))

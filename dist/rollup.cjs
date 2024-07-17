@@ -32,11 +32,11 @@ __export(rollup_exports, {
   default: () => rollup_default
 });
 module.exports = __toCommonJS(rollup_exports);
-var import_chokidar = __toESM(require("../node_modules/chokidar/index.js"), 1);
+var import_chokidar = __toESM(require("chokidar"), 1);
 
 // src/create.js
 var import_fs = __toESM(require("fs"), 1);
-var import_ejs = __toESM(require("../node_modules/ejs/lib/ejs.js"), 1);
+var import_ejs = __toESM(require("ejs"), 1);
 var import_path = __toESM(require("path"), 1);
 var import_url = require("url");
 var import_meta = {};
