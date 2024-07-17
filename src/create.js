@@ -3,9 +3,12 @@ import ejs from 'ejs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
+let dirname = null
+try {
+  dirname = __dirname
+} catch (e) {
+  dirname = path.dirname(fileURLToPath(import.meta.url))
+}
 const fileHeader = `/* eslint-disable */
 /* prettier-ignore */
 // @ts-nocheck
@@ -37,7 +40,7 @@ const createApiNameAndUrl = (urlStr) => {
   })
   return {
     apiName: nameArr.join('') + 'Api',
-    url: urlArr.join('/')
+    url: '/' + urlArr.join('/')
   }
 }
 
@@ -109,7 +112,7 @@ const createApiFile = (dirPath, fileExt, apiPathObj, templatePath) => {
     fs.mkdirSync(currentPath)
   }
   // 解析模板信息
-  const template = fs.readFileSync(path.join(__dirname, templatePath), 'utf-8')
+  const template = fs.readFileSync(path.join(dirname, '../templates', templatePath), 'utf-8')
 
   Object.entries(apiPathObj).forEach(([key, value]) => {
     const folderPath = path.join(dirPath, key)

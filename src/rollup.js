@@ -1,5 +1,5 @@
 import chokidar from 'chokidar'
-import { create } from './utils/create.mjs'
+import { create } from './create.js'
 import path from 'path'
 
 export default (options = {}) => {
