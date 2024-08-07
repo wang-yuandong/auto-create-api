@@ -54,16 +54,19 @@ var fileHeader = `/* eslint-disable */
 import { request } from '../request'
 
 `;
-var createApiNameAndUrl = (urlStr) => {
-  const arr = urlStr.split("/").filter(Boolean);
+var createApiBaseInfo = (urlStr) => {
+  const infos = urlStr.split("|");
+  if (infos.length === 1) {
+    return {};
+  }
+  const method = infos[0].toLowerCase();
+  const arr = infos[1].split("/").filter(Boolean);
   const nameArr = arr.map((item, index) => {
     let handleStr = item;
     if (/^\{.*\}$/g.test(handleStr)) {
       handleStr = item.replace(/\{(\w+)\}/, (_, match) => "By" + match.charAt(0).toUpperCase() + match.slice(1));
     }
-    if (index !== 0) {
-      handleStr = handleStr.charAt(0).toUpperCase() + handleStr.slice(1);
-    }
+    handleStr = handleStr.charAt(0).toUpperCase() + handleStr.slice(1);
     handleStr = handleStr.replace(/[-_]+([a-z])/g, (_, match) => match.toUpperCase());
     return handleStr;
   });
@@ -71,8 +74,9 @@ var createApiNameAndUrl = (urlStr) => {
     return item.replace(/\{(\w+)\}/, "${params.$1}");
   });
   return {
-    apiName: nameArr.join("") + "Api",
-    url: "/" + urlArr.join("/")
+    apiName: `${method}${nameArr.join("")}`,
+    url: `/${urlArr.join("/")}`,
+    method
   };
 };
 var convertApiPathToObject = (apiPathsJSON) => {
@@ -80,23 +84,28 @@ var convertApiPathToObject = (apiPathsJSON) => {
   Object.entries(apiPathsJSON).forEach(([key, value]) => {
     const subPathArr = key.split("/");
     const optionsArr = value.split("|");
-    const { apiName, url } = createApiNameAndUrl(key);
+    const { apiName, url, method } = createApiBaseInfo(key);
+    if (!apiName || !url || !method) {
+      return;
+    }
     const apiOption = {
       apiName,
       url,
-      method: optionsArr[0],
-      requestType: optionsArr[1] || "String",
-      responseType: optionsArr[2] || "JSON",
-      isAuth: optionsArr[3] === "1"
+      method,
+      requestType: optionsArr[0] || "String",
+      responseType: optionsArr[1] || "JSON",
+      isAuth: optionsArr[2] === "1"
     };
     const dirName = subPathArr[1];
-    const fileName = subPathArr[2];
+    const fileName = subPathArr[2] || dirName;
     if (!obj[dirName]) {
       obj[dirName] = {};
       obj[dirName][fileName] = [apiOption];
     } else {
       if (obj[dirName][fileName]) {
-        obj[dirName][fileName].push(apiOption);
+        if (!obj[dirName][fileName].find((item) => item.apiName === apiOption.apiName)) {
+          obj[dirName][fileName].push(apiOption);
+        }
       } else {
         obj[dirName][fileName] = [apiOption];
       }
@@ -162,7 +171,9 @@ var createApiFile = (dirPath, fileExt, apiPathObj, templatePath) => {
   });
 };
 var create = async (options) => {
-  console.time("auto-create-api");
+  if (options.log) {
+    console.time("auto-create-api");
+  }
   const fileExt = options.ts ? ".ts" : ".js";
   const templatePath = options.ts ? "./template.ts.ejs" : "./template.ejs";
   try {
@@ -170,8 +181,8 @@ var create = async (options) => {
     const jsonObject = JSON.parse(fileContent);
     const apiPathObj = convertApiPathToObject(jsonObject);
     createApiFile(import_path.default.dirname(options.configFilePath), fileExt, apiPathObj, templatePath);
-    console.timeEnd("auto-create-api");
     if (options.log) {
+      console.timeEnd("auto-create-api");
       console.log("auto-create-api : success!");
     }
   } catch (e) {

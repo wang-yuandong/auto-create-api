@@ -8,19 +8,32 @@ npm install auto-create-api -D
 
 ## Example
 
+### path config file（paths.config）
+
+```javascript
+// 'method|url': requestType|responseType|isAuth:[0|1]
+// 如："get|/profile/password/reset/confirm/edit": "String|JSON|0"
+
+// 如果路径中存在变量，则需要在入参中添加变量名，
+// 如：`/user/subuser/list/{id}`，同时在调用请求接口时，需要将变量名添加到请求参数中
+// 如：`requestName({id: 1,other: 'xxx'})`
+```
 ### paths.json
 
 ```json
 {
-  "/profile/password/reset/confirm/edit": "GET|String|JSON|0",
-  "/profile/detail/{id}/edit": "POST|FormData|String|1",
-  "/user/detail/{name}/edit": "POST|FormData|FormData|1",
-  "/user/subuser/list": "GET|String|Blob|1",
-  "/user/subuser/list/{id}": "GET|String|ArrayBuffer|1",
-  "/user/subuser/list/{id}/{name}": "GET|String|JSON|1",
-  "/service-user/user/getUserInfo": "GET|String|JSON|1",
-  "/service-sso/sso/login": "GET|String|JSON|1",
-  "/service-list/sso/login": "GET|String|JSON|1"
+  "get|/profile/password/reset/confirm/edit": "String|JSON|0",
+  "get|/profile/detail/{id}/edit": "FormData|String|1",
+  "get|/user/detail/{name}/edit": "FormData|FormData|1",
+  "get|/user/subuser/list": "String|Blob|1",
+  "get|/user/subuser/list/{id}": "String|ArrayBuffer|1",
+  "post|/user/subuser/list/{id}/{name}": "String|JSON|1",
+  "post|/service-user/user/getUserInfo": "String|JSON|1",
+  "post|/service-sso/sso/login": "String|JSON|1",
+  "post|/service-sso": "String|JSON|1",
+  "get|/service-sso": "String|JSON|1",
+  "post|/service-sso/sso": "String|JSON|1",
+  "post|/service-list/sso/login": "String|JSON|1"
 }
 ```
 
@@ -70,15 +83,7 @@ autoCreateApi({
   log:false 
 })
 ```
-### path config file（paths.config）
 
-```javascript
-// 'url': requestMethod|paramType|responseType|isAuth:[0|1]
-// 如："/profile/password/reset/confirm/edit": "GET|String|JSON|0"
-
-// 如果路径中存在变量，则需要在入参中添加变量名，
-// 如：`/user/subuser/list/{id}`，同时在调用请求接口时，需要将变量名添加到请求参数中，如：`requestName({id: 1,other: 'xxx'})`
-```
 ## Result
 
 ### before create

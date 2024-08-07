@@ -18,29 +18,40 @@ import { request } from '../request'
 
 `
 /**
- * 创建apiName和url
+ * 解析API基础信息
  * @param urlStr
- * @returns {{apiName: string, url: string}}
+ * @returns {{}} || {}
  */
-const createApiNameAndUrl = (urlStr) => {
-  const arr = urlStr.split('/').filter(Boolean)
+const createApiBaseInfo = (urlStr) => {
+  // 获取url信息
+  const infos = urlStr.split('|')
+  // 如果只有一个元素，则返回空对象
+  if (infos.length === 1) {
+    return {}
+  }
+  const method = infos[0].toLowerCase()
+  const arr = infos[1].split('/').filter(Boolean)
+  // 处理url
   const nameArr = arr.map((item, index) => {
     let handleStr = item
+    // 如果是参数，则替换为By开头
     if (/^\{.*\}$/g.test(handleStr)) {
       handleStr = item.replace(/\{(\w+)\}/, (_, match) => 'By' + match.charAt(0).toUpperCase() + match.slice(1))
     }
-    if (index !== 0) {
-      handleStr = handleStr.charAt(0).toUpperCase() + handleStr.slice(1)
-    }
+    // 首字母大写
+    handleStr = handleStr.charAt(0).toUpperCase() + handleStr.slice(1)
+    // 驼峰命名
     handleStr = handleStr.replace(/[-_]+([a-z])/g, (_, match) => match.toUpperCase())
     return handleStr
   })
+  // 拼接url
   const urlArr = arr.map((item) => {
     return item.replace(/\{(\w+)\}/, '${params.$1}')
   })
   return {
-    apiName: nameArr.join('') + 'Api',
-    url: '/' + urlArr.join('/')
+    apiName: `${method}${nameArr.join('')}`,
+    url: `/${urlArr.join('/')}`,
+    method
   }
 }
 
@@ -52,23 +63,29 @@ const convertApiPathToObject = (apiPathsJSON) => {
   Object.entries(apiPathsJSON).forEach(([key, value]) => {
     const subPathArr = key.split('/')
     const optionsArr = value.split('|')
-    const { apiName, url } = createApiNameAndUrl(key)
+    const { apiName, url, method } = createApiBaseInfo(key)
+    if (!apiName || !url || !method) {
+      return
+    }
     const apiOption = {
       apiName,
       url,
-      method: optionsArr[0],
-      requestType: optionsArr[1] || 'String',
-      responseType: optionsArr[2] || 'JSON',
-      isAuth: optionsArr[3] === '1'
+      method,
+      requestType: optionsArr[0] || 'String',
+      responseType: optionsArr[1] || 'JSON',
+      isAuth: optionsArr[2] === '1'
     }
     const dirName = subPathArr[1]
-    const fileName = subPathArr[2]
+    const fileName = subPathArr[2] || dirName
     if (!obj[dirName]) {
       obj[dirName] = {}
       obj[dirName][fileName] = [apiOption]
     } else {
       if (obj[dirName][fileName]) {
-        obj[dirName][fileName].push(apiOption)
+        // 根据apiOption中apiName查找，如果不存在则push
+        if (!obj[dirName][fileName].find((item) => item.apiName === apiOption.apiName)) {
+          obj[dirName][fileName].push(apiOption)
+        }
       } else {
         obj[dirName][fileName] = [apiOption]
       }
@@ -157,7 +174,9 @@ const createApiFile = (dirPath, fileExt, apiPathObj, templatePath) => {
  * @returns {Promise<void>}
  */
 export const create = async (options) => {
-  console.time('auto-create-api')
+  if (options.log) {
+    console.time('auto-create-api')
+  }
   const fileExt = options.ts ? '.ts' : '.js'
   const templatePath = options.ts ? './template.ts.ejs' : './template.ejs'
   try {
@@ -166,8 +185,8 @@ export const create = async (options) => {
     const jsonObject = JSON.parse(fileContent)
     const apiPathObj = convertApiPathToObject(jsonObject)
     createApiFile(path.dirname(options.configFilePath), fileExt, apiPathObj, templatePath)
-    console.timeEnd('auto-create-api')
     if (options.log) {
+      console.timeEnd('auto-create-api')
       console.log('auto-create-api : success!')
     }
   } catch (e) {
